@@ -1,4 +1,4 @@
-package com.nimeshpatel.weatherforcast.data
+package com.nimeshpatel.weatherforcast.data.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

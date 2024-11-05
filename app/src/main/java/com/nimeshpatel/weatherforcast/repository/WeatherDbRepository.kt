@@ -1,6 +1,6 @@
 package com.nimeshpatel.weatherforcast.repository
 
-import com.nimeshpatel.weatherforcast.data.WeatherDao
+import com.nimeshpatel.weatherforcast.data.room.WeatherDao
 import com.nimeshpatel.weatherforcast.model.Favourite
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

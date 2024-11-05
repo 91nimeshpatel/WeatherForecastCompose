@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.nimeshpatel.weatherforcast"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nimeshpatel.weatherforcast"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -21,6 +21,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // StorageModule
+        resValue("string", "app_preferences", project.findProperty("app_preferences") as String)
     }
 
     buildTypes {
@@ -88,6 +91,11 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+
+    // Data Store
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
+
     //Room
     implementation(libs.androidx.room.runtime)
     androidTestImplementation(libs.androidx.room.compiler)
@@ -95,7 +103,7 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt) MUST HAVE!
     kapt(libs.androidx.room.compiler)
     implementation(libs.room.ktx)
-
+    implementation(libs.room.rxjava2)
 
     //Retrofit
     implementation(libs.retrofit)

@@ -1,10 +1,16 @@
 package com.nimeshpatel.weatherforcast.screens.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.nimeshpatel.weatherforcast.data.DataOrException
+import com.nimeshpatel.weatherforcast.data.datastore.AppPrefImpl
 import com.nimeshpatel.weatherforcast.model.Weather
 import com.nimeshpatel.weatherforcast.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -12,12 +18,26 @@ import javax.inject.Inject
  * Purpose:
  */
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: WeatherRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: WeatherRepository,
+    private val appPrefImpl: AppPrefImpl) : ViewModel() {
+    private val _isImperial = MutableStateFlow(false)
+    val isImperial = _isImperial.asStateFlow()
 
-    suspend fun getWeatherData(cityQuery: String, units: String):
+    init {
+
+        viewModelScope.launch {
+            appPrefImpl.isImperial().collect{
+                _isImperial.value = it?: false
+            }
+        }
+    }
+
+
+    suspend fun getWeatherData(cityQuery: String):
             DataOrException<Weather, Boolean, Exception> {
 
-        return repository.getWeather(cityQuery = cityQuery, units =units)
+        Log.e("neem", "getWeatherData: ${isImperial.value}", )
+        return repository.getWeather(cityQuery = cityQuery, units = if(isImperial.value) "imperial" else "metric")
 
     }
 }

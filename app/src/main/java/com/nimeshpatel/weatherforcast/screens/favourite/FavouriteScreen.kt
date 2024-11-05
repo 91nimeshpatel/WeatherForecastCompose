@@ -129,7 +129,6 @@ fun CityRow(
             Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete",
                 modifier = Modifier.clickable {
                     favouriteViewModel.deleteFavourite(favourite)
-                    Log.e("neem", "CityRow: $favourite ", )
                 },
                 tint = Color.Red.copy(alpha = 0.3f))
         }

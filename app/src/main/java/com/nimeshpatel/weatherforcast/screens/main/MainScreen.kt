@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -55,17 +56,17 @@ fun MainScreen(
     mainViewModel: MainViewModel = hiltViewModel(),
     city: String
 ) {
-
+    val isImperial = mainViewModel.isImperial.collectAsState().value
     val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ) {
-        value = mainViewModel.getWeatherData(cityQuery = city, "imperial")
+        value = mainViewModel.getWeatherData(cityQuery = city)
     }.value
 
     if (weatherData.loading == true) {
         CircularProgressIndicator()
     } else if (weatherData.data != null) {
-        MainScaffold(weatherData.data, navController)
+        MainScaffold(weatherData.data,isImperial, navController)
     }
 }
 
@@ -73,6 +74,7 @@ fun MainScreen(
 @Composable
 fun MainScaffold(
     weather: Weather?,
+    isImperial:Boolean,
     navController: NavController
 ) {
 
@@ -80,9 +82,6 @@ fun MainScaffold(
     val countryName = weather?.city?.country?:""
     val title = if(cityName.isNotEmpty()) "$cityName, $countryName" else countryName
 
-    var isImperial by remember {
-        mutableStateOf(false)
-    }
 
     Scaffold(
         topBar = {
